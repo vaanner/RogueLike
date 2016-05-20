@@ -4,13 +4,14 @@ using System.Collections;
 public class Player : MonoBehaviour {
 
     private Vector2 originPos;
-    private Vector2 targetPos;
+    [HideInInspector]public Vector2 targetPos;
     private Rigidbody2D m_rigidBody2d;
     private BoxCollider2D m_collider;
     private Animator m_animator;
     public float smoothing = 1.0f;
     public float restTime = 1.0f;
     private float restTimer = 0f;
+    
 	// Use this for initialization
 	void Start () {
 	    originPos = new Vector2(1,1);
@@ -24,6 +25,8 @@ public class Player : MonoBehaviour {
 	void Update () {
         
         m_rigidBody2d.MovePosition(Vector2.Lerp(transform.position,targetPos,smoothing*Time.deltaTime));
+        //食物为0时 角色停止移动
+        if(GameManager.Instance.food < 0 || GameManager.Instance.isEnd) return;
         restTimer += Time.deltaTime;
         if(restTimer<restTime)
         return;
@@ -69,7 +72,13 @@ public class Player : MonoBehaviour {
                 }
             }
             GameManager.Instance.OnPlayerMove();
+            GameManager.Instance.ReduceFood(GameManager.Instance.level);
             restTimer = 0;
         }
 	}
+    private void TakeDamage(int lossFood)
+    {
+        GameManager.Instance.ReduceFood(lossFood);
+        m_animator.SetTrigger("Damage");
+    }
 }

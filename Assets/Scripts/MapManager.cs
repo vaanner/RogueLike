@@ -80,7 +80,7 @@ public class MapManager : MonoBehaviour {
         int foodCount = Random.Range(2,gameManager.level * 2+1);
         InstantiateItems(foodCount,foodArray,mapHolder);
         //创建敌人
-        int enemyCount = gameManager.level / 2 + 1;
+        int enemyCount = gameManager.level / 2 + 2;
         InstantiateItems(enemyCount,enemyArray,mapHolder);
         //创建出口
         GameObject exit = Instantiate(exitPrefab,new Vector2(rows-2,cols-2),Quaternion.identity) as GameObject;

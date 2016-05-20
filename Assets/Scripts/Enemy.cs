@@ -6,8 +6,10 @@ public class Enemy : MonoBehaviour
 
     private Transform player;
     private Vector2 targetPosition;
+    public int lossFood = 10;
     private Rigidbody2D m_rigidbody;
     private BoxCollider2D m_collider;
+    private Animator m_animator;
     public float smoothing = 3;
     // Use this for initialization
     void Start()
@@ -17,19 +19,22 @@ public class Enemy : MonoBehaviour
         targetPosition = transform.position;
         GameManager.Instance.enemyList.Add(this);
         m_collider = GetComponent<BoxCollider2D>();
+        m_animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        m_rigidbody.MovePosition(Vector2.Lerp(transform.position, targetPosition, smoothing * Time.deltaTime));
+        m_rigidbody.MovePosition(Vector2.Lerp(transform.position,targetPosition,smoothing*Time.deltaTime));
     }
     public void Move()
     {
         Vector2 offset = player.position - transform.position;
-        if (offset.magnitude < 1.1)
+        if (offset.magnitude < 1.0f)
         {
             //Attack
+            m_animator.SetTrigger("Attack");
+            player.SendMessage("TakeDamage",lossFood);
         }
         else
         {
