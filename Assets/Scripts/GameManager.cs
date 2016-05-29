@@ -14,10 +14,12 @@ public class GameManager : MonoBehaviour {
     private Text failText;
     private Player m_player;
     private MapManager m_mapManager;
+    public AudioClip playerDieAudio;
 	// Use this for initialization
     void Awake()
     {
         _instance = this;
+        DontDestroyOnLoad(gameObject);
         InitGame();
     }
     public static GameManager Instance
@@ -29,10 +31,18 @@ public class GameManager : MonoBehaviour {
     }
     void InitGame()
     {
-        foodText = GameObject.Find("FoodText").GetComponent<Text>();
-        failText = GameObject.Find("FailText").GetComponent<Text>();
-        m_player = GameObject.Find("Player").GetComponent<Player>();
+        //初始化地图
         m_mapManager = GetComponent<MapManager>();
+        m_mapManager.InitMap();
+        //初始化 UI
+        foodText = GameObject.Find("FoodText").GetComponent<Text>();
+        UpdateFoodText(food);
+        failText = GameObject.Find("FailText").GetComponent<Text>();
+        failText.enabled = false;
+        m_player = GameObject.Find("Player").GetComponent<Player>();
+        //初始化参数
+        isEnd = false;
+        enemyList.Clear();
     }
 	void Start () {
         failText.gameObject.SetActive(false);
@@ -73,15 +83,24 @@ public class GameManager : MonoBehaviour {
         {
             isEnd = true;
             //加载下一个关卡
+            Application.LoadLevel(Application.loadedLevel);
         }
     }
-    void UpdateFoodText(int foodChange)
+    void UpdateFoodText(int food)
     {
-        foodText.text = "Food:" + foodChange;
-        if (foodChange < 0)
+        foodText.text = "Food:" + food;
+        if (food <= 0)
         {
+            AudioManager.Instance.RandomPlayClips(playerDieAudio);
+            AudioManager.Instance.bgMusicStop();
+            failText.enabled = true;
             failText.gameObject.SetActive(true);
+            foodText.enabled = false;
         }
     }
-    
+    void OnLevelWasLoaded(int level)
+    {
+       this.level++;
+       InitGame();
+    }
 }

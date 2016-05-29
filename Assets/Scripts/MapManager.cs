@@ -15,8 +15,6 @@ public class MapManager : MonoBehaviour {
     public GameObject[] enemyArray;
     //出口 prefab
     public GameObject exitPrefab;
-    //游戏控制脚本
-    public GameManager gameManager;
     //障碍物 最小数量
     public int minWallNum = 2;
     //障碍物 最大数量
@@ -29,19 +27,8 @@ public class MapManager : MonoBehaviour {
     public int rows = 10;
     //地图 列数
     public int cols = 10;
-	// Use this for initialization
-	void Start () 
-    {
-        gameManager = this.GetComponent<GameManager>();
-	    InitMap();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
     //生成地图
-    private void InitMap()
+    public void InitMap()
     {
         mapHolder = new GameObject("Map").transform;
         InitBackGround(mapHolder);
@@ -77,10 +64,10 @@ public class MapManager : MonoBehaviour {
         int wallNum = Random.Range(minWallNum,maxWallNum);
         InstantiateItems(wallNum,wallArray,mapHolder);
         //随机生成植物
-        int foodCount = Random.Range(2,gameManager.level * 2+1);
+        int foodCount = Random.Range(2,GameManager.Instance.level * 2+1);
         InstantiateItems(foodCount,foodArray,mapHolder);
         //创建敌人
-        int enemyCount = gameManager.level / 2 + 2;
+        int enemyCount = GameManager.Instance.level / 2 + 2;
         InstantiateItems(enemyCount,enemyArray,mapHolder);
         //创建出口
         GameObject exit = Instantiate(exitPrefab,new Vector2(rows-2,cols-2),Quaternion.identity) as GameObject;

@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
     private BoxCollider2D m_collider;
     private Animator m_animator;
     public float smoothing = 3;
+    public AudioClip attackAudio;  //攻击音效
     // Use this for initialization
     void Start()
     {
@@ -33,6 +34,7 @@ public class Enemy : MonoBehaviour
         if (offset.magnitude < 1.0f)
         {
             //Attack
+            AudioManager.Instance.RandomPlayClips(attackAudio);
             m_animator.SetTrigger("Attack");
             player.SendMessage("TakeDamage",lossFood);
         }

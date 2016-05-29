@@ -11,7 +11,14 @@ public class Player : MonoBehaviour {
     public float smoothing = 1.0f;
     public float restTime = 1.0f;
     private float restTimer = 0f;
-    
+    public AudioClip chop1Audio;    //攻击音效1
+    public AudioClip chop2Audio;    //攻击音效2
+    public AudioClip footStep1Audio;    //脚步声1
+    public AudioClip footStep2Audio;    //脚步声2
+    public AudioClip soda1Audio;        //苏打吃声1
+    public AudioClip soda2Audio;        //苏打吃声2
+    public AudioClip fruit1Audio;       //樱桃吃声1
+    public AudioClip fruit2Audio;       //樱桃吃声2
 	// Use this for initialization
 	void Start () {
 	    originPos = new Vector2(1,1);
@@ -43,6 +50,7 @@ public class Player : MonoBehaviour {
             m_collider.enabled = true;
             if(hit.transform == null)
             {
+                AudioManager.Instance.RandomPlayClips(footStep1Audio,footStep2Audio);
                 targetPos += new Vector2(h,v);
             }
             else
@@ -52,15 +60,18 @@ public class Player : MonoBehaviour {
                     case "OutWall":
                     break;
                     case "Wall":
+                    AudioManager.Instance.RandomPlayClips(chop1Audio,chop2Audio);
                     m_animator.SetTrigger("Attack");
                     hit.collider.SendMessage("TakeDamage");
                     break;
                     case "Soda":
+                    AudioManager.Instance.RandomPlayClips(soda1Audio,soda2Audio);
                     GameManager.Instance.AddFood(20);
                     targetPos += new Vector2(h,v);
                     Destroy(hit.transform.gameObject);
                     break;
                     case "Food":
+                    AudioManager.Instance.RandomPlayClips(fruit1Audio,fruit2Audio);
                     GameManager.Instance.AddFood(10);
                     targetPos += new Vector2(h,v);
                     Destroy(hit.transform.gameObject);
