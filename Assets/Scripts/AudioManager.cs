@@ -3,6 +3,7 @@ using System.Collections;
 
 public class AudioManager : MonoBehaviour {
 
+<<<<<<< HEAD
     private static AudioManager _instance;
     public AudioSource efxAudioSource;  //播放音效
     public AudioSource bgAudioSource;   //播放背景音乐
@@ -33,4 +34,15 @@ public class AudioManager : MonoBehaviour {
     {
         bgAudioSource.Stop();
     }
+=======
+	// Use this for initialization
+	void Start () {
+	
+	}
+	
+	// Update is called once per frame
+	void Update () {
+	
+	}
+>>>>>>> origin/master
 }
